@@ -12,8 +12,14 @@ public class CoincidenceIndex {
             final String text = readSource(fileName);
 
             final float coincidence = calculateCoincidence(text);
-            System.out.printf("Coincidence Index for file %s: %f %n", fileName, coincidence);
+            System.out.printf("Coincidence Index for file %s: %.4f %n", fileName, coincidence);
         }
+
+        final String fileName = "TextoClaro.txt";
+        final String text = readSource(fileName);
+
+        final float coincidence = calculateCoincidence(text);
+        System.out.printf("Coincidence Index for file %s: %.4f %n", fileName, coincidence);
     }
 
     private static float calculateCoincidence(final String text) {
