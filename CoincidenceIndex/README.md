@@ -1,7 +1,7 @@
 # Solutions
 
 ### T1.txt
-IC = 0,0807 -> ?
+IC = 0,0807 -> German
 
 ### T2.txt
 IC = 0,0735 -> Spanish/Italian/Portuguese
@@ -10,7 +10,7 @@ IC = 0,0735 -> Spanish/Italian/Portuguese
 IC = 0,0671 -> English
 
 ### T4.txt
-IC = 0,0807 -> ?
+IC = 0,0807 -> Spanish/Italian/Portuguese
 
 ### T5.txt
 IC = 0,0735 -> Spanish/Italian/Portuguese
@@ -22,4 +22,4 @@ IC = 0,0671 -> English
 IC = 0,0385 -> Random
 
 ### TextoClaro.txt
-IC = 0,0671 -> ?
+IC = 0,0671 -> English
