@@ -1,8 +1,6 @@
 package Utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class KeyUtils {
 
@@ -45,7 +43,7 @@ public class KeyUtils {
 
     private void findKeysPt() {
         if (!coincidenceIndexPt.isEmpty()) {
-            final int indexOfA = ALPHABET.get('a');
+            final int indexOfO = ALPHABET.get('o');
             for (final int i : coincidenceIndexPt.keySet()) {
                 final ArrayList<String> textsByKey = splitText(i);
                 ArrayList<HashMap<Character, Integer>> keysFrequencies = calculateFrequency(textsByKey);
@@ -53,19 +51,16 @@ public class KeyUtils {
                 final StringBuilder keyBuilder = new StringBuilder();
                 for (final HashMap<Character, Integer> keyFrequency : keysFrequencies) {
                     keyFrequency.remove('@');
-                    int biggestFrequency = 0;
-                    char mostFrequentChar = '@';
+                    final LinkedHashMap<Character, Integer> sortedMap = new LinkedHashMap<>();
+                    keyFrequency.entrySet()
+                            .stream()
+                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                            .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
 
-                    for (final char c : keyFrequency.keySet()) {
-                        final long letterFrequency = keyFrequency.get(c);
-                        if (letterFrequency > biggestFrequency) {
-                            biggestFrequency = (int) letterFrequency;
-                            mostFrequentChar = c;
-                        }
-                    }
+                    char thirdMostFrequentChar = sortedMap.keySet().stream().toList().get(2);
 
-                    final int encryptedIndexOfA = ALPHABET.get(mostFrequentChar);
-                    final int letterShift = encryptedIndexOfA - indexOfA;
+                    final int encryptedIndexOfO = ALPHABET.get(thirdMostFrequentChar);
+                    final int letterShift = encryptedIndexOfO - indexOfO;
                     try {
                         final char keyChar = ALPHABET.entrySet()
                                 .stream()
