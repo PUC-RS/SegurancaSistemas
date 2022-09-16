@@ -3,6 +3,7 @@ package Utils;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class KeyUtils {
 
@@ -16,6 +17,8 @@ public class KeyUtils {
 
     private static final HashMap<Character, Integer> ALPHABET = new Alphabet().getALPHABET();
 
+    private static String encryptedText;
+
     private KeyUtils() {
     }
 
@@ -27,13 +30,63 @@ public class KeyUtils {
         return keysEn;
     }
 
-    public static void findKeys(final String encryptedText) {
-        calculateCoincidenceIndex(encryptedText);
+    public static void findKeys(final String text) {
+        encryptedText = text;
+
+        calculateCoincidenceIndex();
+
+        findKeysPt();
+
+        findKeysEn();
     }
 
-    private static void calculateCoincidenceIndex(final String encryptedText) {
+    private static void findKeysPt() {
+        if (!coincidenceIndexPt.isEmpty()) {
+            final int indexOfA = ALPHABET.get('a');
+            for (final int i : coincidenceIndexPt.keySet()) {
+                final ArrayList<String> textsByKey = splitText(i);
+                ArrayList<HashMap<Character, Integer>> keysFrequencies = calculateFrequency(textsByKey);
+
+                final StringBuilder keyBuilder = new StringBuilder();
+                for (final HashMap<Character, Integer> keyFrequency : keysFrequencies) {
+                    keyFrequency.remove('/');
+                    int biggestFrequency = 0;
+                    char mostFrequentChar = ' ';
+
+                    for (final char c : keyFrequency.keySet()) {
+                        final long letterFrequency = keyFrequency.get(c);
+                        if (letterFrequency > biggestFrequency) {
+                            biggestFrequency = (int) letterFrequency;
+                            mostFrequentChar = c;
+                        }
+                    }
+
+                    final int encryptedIndexOfA = ALPHABET.get(mostFrequentChar);
+                    final int letterShift = encryptedIndexOfA - indexOfA;
+                    try {
+                        final char keyChar = ALPHABET.entrySet()
+                                .stream()
+                                .filter(characterIntegerEntry -> characterIntegerEntry.getValue() == letterShift)
+                                .map(Map.Entry::getKey)
+                                .findFirst()
+                                .get();
+
+                        keyBuilder.append(keyChar);
+                    } catch (final Exception e) {
+                    }
+
+                    keysPt.add(keyBuilder.toString());
+                }
+            }
+        }
+    }
+
+    private static void findKeysEn() {
+    }
+
+    private static void calculateCoincidenceIndex() {
         for (int keySize = 0; keySize < MAX_KEY_LENGTH; keySize++) {
-            ArrayList<String> encryptedSplitText = splitText(encryptedText, keySize);
+            ArrayList<String> encryptedSplitText = splitText(keySize);
 
             ArrayList<HashMap<Character, Integer>> frequencies = calculateFrequency(encryptedSplitText);
 
@@ -49,16 +102,17 @@ public class KeyUtils {
 
                 final double coincidenceIndex = (double) sum / n;
 
-                if (coincidenceIndex > 0.062 && coincidenceIndex < 0.07) {
+                // Margin of 0.006
+                if (coincidenceIndex > 0.064 && coincidenceIndex < 0.072) {
                     coincidenceIndexEn.put(keySize, coincidenceIndex);
-                } else if (coincidenceIndex > 0.07 && coincidenceIndex < 0.078) {
+                } else if (coincidenceIndex > 0.072 && coincidenceIndex < 0.080) {
                     coincidenceIndexPt.put(keySize, coincidenceIndex);
                 }
             }
         }
     }
 
-    private static ArrayList<String> splitText(final String encryptedText, final int keySize) {
+    private static ArrayList<String> splitText(final int keySize) {
         final ArrayList<String> textSplit = new ArrayList<>();
         StringBuilder builder;
 
