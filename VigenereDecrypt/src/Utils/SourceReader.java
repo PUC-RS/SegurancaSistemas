@@ -7,21 +7,17 @@ import java.util.Scanner;
 public class SourceReader {
     static final String PATH = "./VigenereDecrypt/src/resources/";
 
-    public static String readSource(String fileName) {
+    public static String readSource(String fileName) throws FileNotFoundException {
         fileName = PATH + fileName;
 
         final StringBuilder textContent = new StringBuilder();
-        try {
-            File file = new File(fileName);
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-                textContent.append(reader.nextLine());
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File was not found on path: " + PATH);
-            e.printStackTrace();
+
+        File file = new File(fileName);
+        Scanner reader = new Scanner(file);
+        while (reader.hasNextLine()) {
+            textContent.append(reader.nextLine());
         }
+        reader.close();
 
         return textContent.toString();
     }
