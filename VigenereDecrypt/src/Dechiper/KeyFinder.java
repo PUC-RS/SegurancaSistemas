@@ -42,6 +42,11 @@ public class KeyFinder {
         return 0;
     }
 
+    /**
+     * Calculate the coincidence index for a given array of char frequencies
+     * @param frequencies The array of frequencies
+     * @return The value of the coincidence index for that array
+     */
     private static double calculateCoincidenceIndex(int[] frequencies) {
         long sum = 0;
         long textLength = 0;
@@ -54,6 +59,7 @@ public class KeyFinder {
         }
         return sum / (double) (textLength * (textLength - 1));
     }
+
 
     private static boolean isCloseToCoincidenceIndex(double value) {
         double difference = value - PT_CI;

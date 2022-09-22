@@ -8,6 +8,7 @@ public class Decipher {
     private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
     public static String decryptFile(final String text) {
+
         int keySize = searchKeySize(text);
 
         String key = searchKey(keySize, text);
