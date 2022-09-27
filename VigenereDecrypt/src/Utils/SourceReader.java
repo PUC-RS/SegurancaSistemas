@@ -5,8 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class SourceReader {
-    static final String PATH = "./VigenereDecrypt/src/resources/";
+    static final String PATH = "./src/resources/";
 
+    /**
+     * Read a file
+     * @param fileName The file name
+     * @return A String with the encrypted file
+     * @throws FileNotFoundException
+     */
     public static String readSource(String fileName) throws FileNotFoundException {
         fileName = PATH + fileName;
 

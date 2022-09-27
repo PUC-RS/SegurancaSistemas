@@ -5,8 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class SourceWriter {
-    private static final String PATH = "./VigenereDecrypt/src/output/";
+    private static final String PATH = "./src/output/";
 
+    /**
+     * Write the content in a new file
+     * @param content The file content
+     * @param fileName The file name
+     */
     public static void writeFile(final String content, final String fileName) {
         final String pathWithFileName = PATH + fileName;
         new File(pathWithFileName);
