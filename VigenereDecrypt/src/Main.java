@@ -15,6 +15,7 @@ public class Main {
         System.out.println("What file do you want to decrypt ?");
         final String fileName = in.nextLine();
         final String text = readSource(fileName);
+        System.out.println(text.substring(0, 50));
         final String plainText = decryptFile(text);
         System.out.println(plainText.substring(0, 50));
         final String plainTextFileName = PLAIN_TEXT_PREFIX + fileName;

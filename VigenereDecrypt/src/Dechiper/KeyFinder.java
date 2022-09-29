@@ -103,11 +103,11 @@ public class KeyFinder {
 
         for (int i = 0; i < keySize; i++) {
             char letter = getKeyChar(keySize, i, text);
-            int number = letter - MOST_FREQ_CHAR_CHOOSE;
-            if (number < 0)
-                number += 26;
+            int keyChar = letter - MOST_FREQ_CHAR_CHOOSE;
+            if (keyChar < 0)
+                keyChar += 26;
 
-            key.append(ALPHABET.charAt(number));
+            key.append(ALPHABET.charAt(keyChar));
         }
 
         return key.toString();
