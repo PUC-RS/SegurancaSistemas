@@ -8,15 +8,27 @@ import java.util.ArrayList;
 public class Main {
     private static final String PATH = "./src/Resources/";
     private static final Integer BYTE_SIZE = 1024;
-
     private static Integer sizeOfLastChunk = 0;
 
-    private static byte[] readFile(final String fileName) throws IOException {
+    /**
+     * Read the bytes for a given file.
+     *
+     * @param fileName The file name
+     * @return The bytes of the file
+     * @throws IOException When the file can not be reached
+     */
+    private static byte[] readFileBytes(final String fileName) throws IOException {
         final String fullPath = PATH + fileName;
 
         return Files.readAllBytes(Paths.get(fullPath));
     }
 
+    /**
+     * Split the byte array in minor arrays of 1024 bytes.
+     *
+     * @param bytes The file content
+     * @return ArrayList of multiple byte arrays of 1024 length
+     */
     private static ArrayList<byte[]> splitBytes(final byte[] bytes) {
         ArrayList<byte[]> bytesChunks = new ArrayList<>();
 
@@ -35,8 +47,16 @@ public class Main {
         return bytesChunks;
     }
 
-    private static byte[] getH0(final ArrayList<byte[]> divBytes) throws NoSuchAlgorithmException {
-        byte[] lastChunk = divBytes.remove(divBytes.size() - 1);
+    /**
+     * Finds the hash for the first block of 1024 bytes.
+     *
+     * @param bytesChunks The array of 2014 byte array
+     * @return The hash for the first 1024 bytes
+     * @throws NoSuchAlgorithmException When no cryptographic algorithm is requested
+     *                                  but is not available in the environment
+     */
+    private static byte[] getH0(final ArrayList<byte[]> bytesChunks) throws NoSuchAlgorithmException {
+        byte[] lastChunk = bytesChunks.remove(bytesChunks.size() - 1);
         byte[] lastBlock = new byte[sizeOfLastChunk];
         System.arraycopy(lastChunk, 0, lastBlock, 0, lastBlock.length);
 
@@ -45,12 +65,12 @@ public class Main {
 
         byte[] hash = digest.digest();
 
-        for (int i = divBytes.size() - 1; i >= 0; i--) {
-            byte[] bloco = divBytes.get(i);
-            byte[] toHash = new byte[hash.length + bloco.length];
-            System.arraycopy(bloco, 0, toHash, 0, bloco.length);
-            System.arraycopy(hash, 0, toHash, bloco.length, hash.length);
-            digest.update(toHash);
+        for (int i = bytesChunks.size() - 1; i >= 0; i--) {
+            byte[] chunk = bytesChunks.get(i);
+            byte[] copyChunk = new byte[hash.length + chunk.length];
+            System.arraycopy(chunk, 0, copyChunk, 0, chunk.length);
+            System.arraycopy(hash, 0, copyChunk, chunk.length, hash.length);
+            digest.update(copyChunk);
             hash = digest.digest();
         }
         return hash;
@@ -58,12 +78,12 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            byte[] bytes = readFile("FuncoesResumo - SHA1.mp4");
+            byte[] bytes = readFileBytes("FuncoesResumo - SHA1.mp4");
             ArrayList<byte[]> bytesSlices = splitBytes(bytes);
-            final byte[] hashAnterior = getH0(bytesSlices);
+            final byte[] hash = getH0(bytesSlices);
 
-            StringBuilder sb = new StringBuilder(hashAnterior.length * 2);
-            for (byte b : hashAnterior)
+            StringBuilder sb = new StringBuilder(hash.length * 2);
+            for (byte b : hash)
                 sb.append(String.format("%02x", b));
             System.out.println("Found H0:");
             System.out.println(sb);
