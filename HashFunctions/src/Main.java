@@ -77,7 +77,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        /*
+            According to the project description, the expected result for FuncoesResumo - SHA1.mp4 is
+            302256b74111bcba1c04282a1e31da7e547d4a7098cdaec8330d48bd87569516
+         */
+
         try {
+            //byte[] bytes = readFileBytes("FuncoesResumo - Hash Functions.mp4");
             byte[] bytes = readFileBytes("FuncoesResumo - SHA1.mp4");
             ArrayList<byte[]> bytesSlices = splitBytes(bytes);
             final byte[] hash = getH0(bytesSlices);
